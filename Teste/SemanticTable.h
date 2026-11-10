@@ -10,7 +10,7 @@
 class SemanticTable {
 public:
     enum Types {INT = 0,FLO, CHA, STR,BOO};
-    enum Operations {SUM = 0,SUB,MUL,DIV,REL,MOD,POT,ROO,AND,OR_};
+    enum Operations {SUM = 0,SUB,MUL,DIV,REL,MOD,POT,ROO,AND,OR_, BIT_AND, BIT_OR, BIT_XOR, BIT_SLL, BIT_SRL};
     enum Status {ERR = -1,WAR,OK_};
 
     // TIPO DE RETORNO DAS EXPRESSOES ENTRE TIPOS

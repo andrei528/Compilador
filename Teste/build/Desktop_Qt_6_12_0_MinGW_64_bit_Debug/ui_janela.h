@@ -39,6 +39,8 @@ public:
     QTextEdit *saida;
     QWidget *tab_2;
     QTableWidget *tableWidget;
+    QWidget *tab_3;
+    QPlainTextEdit *assembly;
     QPushButton *botaoCompilar;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
@@ -87,6 +89,13 @@ public:
         tableWidget->setObjectName("tableWidget");
         tableWidget->setGeometry(QRect(0, 0, 478, 169));
         tabWidget->addTab(tab_2, QString());
+        tab_3 = new QWidget();
+        tab_3->setObjectName("tab_3");
+        assembly = new QPlainTextEdit(tab_3);
+        assembly->setObjectName("assembly");
+        assembly->setGeometry(QRect(0, 0, 478, 205));
+        assembly->setReadOnly(true);
+        tabWidget->addTab(tab_3, QString());
 
         horizontalLayout->addWidget(tabWidget);
 
@@ -112,7 +121,7 @@ public:
 
         retranslateUi(Janela);
 
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(Janela);
@@ -123,6 +132,7 @@ public:
         Janela->setWindowTitle(QCoreApplication::translate("Janela", "Janela", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab), QCoreApplication::translate("Janela", "Sa\303\255da", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("Janela", "Tabela", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_3), QCoreApplication::translate("Janela", "Assembly", nullptr));
         botaoCompilar->setText(QCoreApplication::translate("Janela", "Compilar", nullptr));
     } // retranslateUi
 

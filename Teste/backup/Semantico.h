@@ -38,11 +38,51 @@ private:
         bool utilizado;
         int posicao;
 
+        int enderecoMemoria;
+        int tamanhoVetor;
+        int tamanho;
+
         // Informações para funções
         vector<Tipo> tiposParametros;
         bool possuiRetorno;
         bool retornoVoid;
     };
+
+    struct Temporario {
+        int endereco;
+        bool livre;
+    };
+
+    struct Operando {
+        string valor;
+        bool temporario;
+        bool imediato;
+    };
+
+    vector<string> codigoDados;
+    vector<string> codigoTexto;
+
+    vector<Temporario> temporarios;
+
+    //stack<string> pilhaOperandos;
+    //stack<string> pilhaOperacoesCodigo;
+
+    stack<Operando> pilhaOperandosCodigo;
+    stack<int> pilhaTemporariosOperacao;
+    stack<Tipo> pilhaTiposOperandos;
+    stack<int> pilhaEnderecosOperacao;
+
+    int obterTemporario();
+    void liberarTemporario(int endereco);
+
+    void emitirDados(const string& codigo);
+    void emitirInstrucao(const string& codigo);
+
+    string gerarCodigoAssembly() const;
+
+    int proximoEnderecoMemoria;
+
+    string obterRotuloSimbolo(const Simbolo& simbolo) const;
 
     std::vector<Simbolo> tabela;
 
@@ -60,7 +100,8 @@ private:
         const string &nome,
         int posicao,
         Modalidade modalidade,
-        bool inicializado
+        bool inicializado,
+        int tamanho = 1
         );
 
     int buscarSimbolo(const std::string &nome) const;
@@ -98,6 +139,11 @@ private:
     };
 
     stack<ContextoFuncao> pilhaFuncoes;
+
+    int tamanhoVetorPendente;
+    string vetorAtribuicaoPendente;
+    int temporarioIndiceVetor;
+    stack<string> pilhaVetoresAcesso;
 public:
 
     struct SimboloVisualizacao {
@@ -129,6 +175,19 @@ public:
     void verificarNaoUtilizados();
 
     bool retornoVoidPendente;
+
+    void empilharOperando(
+        const string& valor,
+        bool temporario,
+        bool imediato
+        );
+
+    // Retorna o Assembly BIP completo.
+    string getCodigoAssembly() const;
+
+    // Limpa o código gerado para uma nova compilacao.
+    void limparCodigoAssembly();
+
 };
 
 #endif

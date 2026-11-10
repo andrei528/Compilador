@@ -7,7 +7,6 @@
 #include <QAbstractItemView>
 #include <QStringList>
 #include <QVBoxLayout>
-#include <QHeaderView>
 
 #include "Lexico.h"
 #include "Sintatico.h"
@@ -28,6 +27,11 @@ Janela::Janela(QWidget *parent) :
     QVBoxLayout *layoutTabela = new QVBoxLayout(ui->tab_2);
     layoutTabela->setContentsMargins(0, 0, 0, 0);
     layoutTabela->addWidget(ui->tableWidget);
+
+    // Layout da aba de assembly
+    QVBoxLayout *layoutAssembly = new QVBoxLayout(ui->tab_3);
+    layoutAssembly->setContentsMargins(0, 0, 0, 0);
+    layoutAssembly->addWidget(ui->assembly);
 
     // Permite que os componentes cresçam junto com as abas
     ui->saida->setSizePolicy(
@@ -52,11 +56,6 @@ Janela::Janela(QWidget *parent) :
     ui->tableWidget->setSizePolicy(
         QSizePolicy::Expanding,
         QSizePolicy::Expanding
-        );
-
-    // Faz as colunas da tabela aproveitarem a largura disponível.
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(
-        QHeaderView::Stretch
         );
 
     ui->tableWidget->setColumnCount(8);
@@ -86,6 +85,13 @@ Janela::Janela(QWidget *parent) :
         );
     connect(ui->botaoCompilar, &QPushButton::clicked, this, &Janela::tratarCliqueBotao);
 
+    ui->assembly->setSizePolicy(
+        QSizePolicy::Expanding,
+        QSizePolicy::Expanding
+        );
+
+    ui->assembly->setMinimumSize(0, 0);
+
 }
 Janela::~Janela()
 {
@@ -95,6 +101,7 @@ Janela::~Janela()
 void Janela::tratarCliqueBotao() {
 
     ui->tableWidget->setRowCount(0);
+    ui->assembly->clear();
 
     QString codigo = ui->entrada->toPlainText();
     try{
@@ -107,6 +114,11 @@ void Janela::tratarCliqueBotao() {
         semantico.verificarNaoUtilizados();
 
         semantico.mostrarTabela();
+        QString codigoAssembly = QString::fromStdString(
+            semantico.getCodigoAssembly()
+            );
+
+        ui->assembly->setPlainText(codigoAssembly);
 
         const auto simbolos = semantico.getTabelaVisualizacao();
 
@@ -204,6 +216,13 @@ void Janela::tratarCliqueBotao() {
                 .arg(erro.getMessage())
                 .arg(erro.getPosition())
         );
+    }
+    catch (const std::exception &erro)
+    {
+        ui->saida->setPlainText(
+            QString("Erro interno do compilador: %1")
+                .arg(erro.what())
+            );
     }
 }
 
